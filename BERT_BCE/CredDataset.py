@@ -23,7 +23,7 @@ class CredDataset(Dataset):
         c_score = str(self.data.loc[index, 'c_score'])
 
         # Tokenize the pair of sentences to get token ids, attention masks and token type ids
-        encoded_pair = self.tokenizer(query,doc_text,c_score,
+        encoded_pair = self.tokenizer(query,c_score,doc_text,
                                       padding='max_length',  # Pad to max_length
                                       truncation=True,  # Truncate to max_length
                                       max_length=self.maxlen,

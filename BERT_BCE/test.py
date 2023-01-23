@@ -1,11 +1,5 @@
 import torch
-import pandas as pd
-from datasets import load_metric
-from torch.utils.data import DataLoader
 from tqdm import tqdm
-
-from CredClassifier import CredClassifier
-from CredDataset import CredDataset
 
 
 def get_probs_from_logits(logits):

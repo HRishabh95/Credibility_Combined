@@ -18,7 +18,7 @@ class CredClassifier(nn.Module):
             hidden_size = 2048
         elif bert_model == "albert-xxlarge-v2":  # 235M parameters
             hidden_size = 4096
-        elif bert_model == "bert-base-uncased": # 110M parameters
+        elif "BERT" in bert_model: # 110M parameters
             hidden_size = 768
 
         # Freeze bert layers and only train the classification layer weights
