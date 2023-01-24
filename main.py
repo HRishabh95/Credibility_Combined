@@ -7,7 +7,7 @@ from BERT_BCE.CredDataset import *
 from BERT_BCE.CredClassifier import *
 from BERT_BCE.train import train_bert
 
-bert_model = "emilyalsentzer/Bio_ClinicalBERT"  # 'albert-base-v2', 'albert-large-v2', 'albert-xlarge-v2', 'albert-xxlarge-v2', 'bert-base-uncased', ...
+bert_model = "albert-base-v2"  # 'albert-base-v2', 'albert-large-v2', 'albert-xlarge-v2', 'albert-xxlarge-v2', 'bert-base-uncased', ...
 freeze_bert = False  # if True, freeze the encoder weights and only update the classification layer weights
 maxlen = 510  # maximum length of the tokenized input sentence pair : if greater than "maxlen", the input is truncated and else if smaller, the input is padded
 bs = 4  # batch size
