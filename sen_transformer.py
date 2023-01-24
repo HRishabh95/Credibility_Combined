@@ -49,8 +49,8 @@ pooler = models.Pooling(
 model = SentenceTransformer(modules=[bert, pooler])
 
 
-loss = losses.OnlineContrastiveLoss(model=model)
-
+#loss = losses.OnlineContrastiveLoss(model=model)
+loss = losses.MultipleNegativesRankingLoss(model)
 epochs = 4
 
 warmup_steps = math.ceil(len(train_dataloader) * epochs * 0.1) #10% of train data for warm-up
