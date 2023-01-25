@@ -1,15 +1,12 @@
-from transformers import AdamW, get_linear_schedule_with_warmup
-
 from utils import *
 import torch
 import copy
 import numpy as np
-from torch.cuda.amp import autocast, GradScaler
+from torch.cuda.amp import GradScaler
 from tqdm import tqdm
-from CredDataset import *
-from CredClassifier import *
+from BERT_BCE.CredClassifier import *
 
-def train_bert(net, criterion, opti, lr, lr_scheduler, train_loader, val_loader, epochs, iters_to_accumulate,device):
+def train_bert(net, criterion, opti, lr, lr_scheduler, train_loader, val_loader, epochs, iters_to_accumulate,device,bert_model):
     best_loss = np.Inf
     best_ep = 1
     nb_iterations = len(train_loader)
@@ -77,7 +74,7 @@ def train_bert(net, criterion, opti, lr, lr_scheduler, train_loader, val_loader,
             best_ep = ep + 1
 
     # Saving the model
-    path_to_model = 'models/{}_lr_{}_val_loss_{}_ep_{}.pt'.format(bert_model, lr, round(best_loss, 5), best_ep)
+    path_to_model = 'models/{}_lr_{}_val_loss_{}_ep_{}.pt'.format(bert_model.split("/")[-1], lr, round(best_loss, 5), best_ep)
     torch.save(net_copy.state_dict(), path_to_model)
     print("The model has been saved in {}".format(path_to_model))
 
