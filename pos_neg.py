@@ -1,9 +1,10 @@
 import pandas as pd
 import json
 import random
-
 random.seed(47)
-def balance_dataset(data_path,top_n=14,test=4,json_required=False):
+
+
+def balance_dataset(data_path,top_n=14,test=4,json_required=False,triplet=True):
     docs_merged_score= pd.read_csv(data_path,sep=';')
     pos_neg_dataset=[]
     no_qid={}
@@ -22,7 +23,6 @@ def balance_dataset(data_path,top_n=14,test=4,json_required=False):
                 pos_neg_dataset.append(rows.tolist())
                 s='pos'
                 no_qid[qid]+=1
-
 
     pos_neg_dataset=pd.DataFrame(pos_neg_dataset,columns=docs_merged_score.columns)
     pos_neg_dataset['c_score']=pos_neg_dataset['c_score'].astype(str)
@@ -58,6 +58,7 @@ def balance_dataset(data_path,top_n=14,test=4,json_required=False):
                 f.write(json.dumps(item) + "\n")
 
 
+
 def get_unbalanced_dataset(data_path='./datset.csv',test=0.3,json_required=True):
     docs_merged_score = pd.read_csv(data_path, sep=';')
     pos_neg_dataset = []
@@ -90,6 +91,7 @@ def get_unbalanced_dataset(data_path='./datset.csv',test=0.3,json_required=True)
         with open("test_qid.jsonl", "w") as f:
             for item in final_dataset_test:
                 f.write(json.dumps(item) + "\n")
+
 
 
 balance_dataset('./datset.csv')

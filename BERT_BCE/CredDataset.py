@@ -20,10 +20,11 @@ class CredDataset(Dataset):
         # Selecting sentence1 and sentence2 at the specified index in the data frame
         query = str(self.data.loc[index, 'query'])
         doc_text = str(self.data.loc[index, 'text'])
-        c_score = str(self.data.loc[index, 'c_score'])
+        #c_score = f'''[SEP] {str(self.data.loc[index, 'c_score'])} [SEP]''' #albert - 0.631
+        c_score = f'''The credibility score of the document is {str(self.data.loc[index, 'c_score'])}.'''  # albert - 0.7
 
         # Tokenize the pair of sentences to get token ids, attention masks and token type ids
-        encoded_pair = self.tokenizer(query,doc_text,c_score,
+        encoded_pair = self.tokenizer(query,c_score+doc_text,
                                       padding='max_length',  # Pad to max_length
                                       truncation=True,  # Truncate to max_length
                                       max_length=self.maxlen,
