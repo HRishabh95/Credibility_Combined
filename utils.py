@@ -6,6 +6,9 @@ from tqdm import tqdm
 from sklearn.metrics import roc_curve, auc
 import pandas as pd
 
+import glob
+
+
 def set_seed(seed):
     """ Set all seeds to make results reproducible """
     torch.manual_seed(seed)
@@ -55,3 +58,35 @@ def Find_Optimal_Cutoff(target, predicted):
     roc_t = roc.iloc[(roc.tf - 0).abs().argsort()[:1]]
 
     return list(roc_t['threshold'])
+
+
+def reading_evaluator(folder_path):
+    result_folder=folder_path+"/result/"
+    res_c=[]
+    res=[]
+    csv_files = glob.glob(folder_path + "/**/*.csv", recursive=True)
+    for csv_file in csv_files:
+        if 'result' not in csv_file.split("/")[-2]:
+            if 'c_score' in csv_file.split("/")[-2]:
+                batch=int(csv_file.split("/")[-2].split("_")[2])
+                epochs=int(csv_file.split("/")[-2].split("_")[3])
+                score_df=pd.read_csv(csv_file).tail(1)['MRR@10'].values
+                if score_df>0:
+                    score=score_df[0]
+                    res_c.append([batch,epochs,score])
+
+            else:
+                batch=int(csv_file.split("/")[-2].split("_")[2])
+                epochs=int(csv_file.split("/")[-2].split("_")[3])
+                score_df = pd.read_csv(csv_file).tail(1)['MRR@10'].values
+                if score_df>0:
+                    score = score_df[0]
+                    res.append([batch,epochs,score])
+
+    pd.DataFrame(res_c, columns=['epochs', 'batch', 'MRR@10']).to_csv(result_folder + "c_score.csv", index=None, sep=';')
+    pd.DataFrame(res,columns=['epochs','batch','MRR@10']).to_csv(result_folder+"no_ccscore.csv",index=None,sep=';')
+
+
+# folder_path='/tmp/pycharm_project_447/cross_encoder_CRRerank_bert_base'
+# reading_evaluator(folder_path)
+
