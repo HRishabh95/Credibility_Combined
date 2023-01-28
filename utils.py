@@ -8,6 +8,18 @@ import pandas as pd
 
 import glob
 
+import errno
+import os
+
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc:  # Python ≥ 2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        # possibly handle other errno cases here, otherwise finally:
+        else:
+            raise
 
 def set_seed(seed):
     """ Set all seeds to make results reproducible """
@@ -84,7 +96,7 @@ def reading_evaluator(folder_path):
                     res.append([batch,epochs,score])
 
     pd.DataFrame(res_c, columns=['epochs', 'batch', 'MRR@10']).to_csv(result_folder + "c_score.csv", index=None, sep=';')
-    pd.DataFrame(res,columns=['epochs','batch','MRR@10']).to_csv(result_folder+"no_ccscore.csv",index=None,sep=';')
+    pd.DataFrame(res,columns=['epochs','batch','MRR@10']).to_csv(result_folder+"no_c_score.csv",index=None,sep=';')
 
 
 # folder_path='/tmp/pycharm_project_447/cross_encoder_CRRerank_bert_base'
