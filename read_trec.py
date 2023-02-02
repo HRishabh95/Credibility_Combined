@@ -32,10 +32,10 @@ def trec_generate(f):
 
 
 #Bm25 retrived
-docs_100=pd.read_csv('/home/ricky/Documents/PhDproject/Project_folder/pseudo_journals_Goodit/docs/docs_top_100.csv',sep='\t')
+docs_100=pd.read_csv('/home/ubuntu/rupadhyay/CREDPASS/docs/TREC2020_BM25_clean_100.csv',sep='\t')
 docs_100=docs_100[['text','query','docno','qid']]
 #qrels
-qrels=pd.read_csv('/home/ricky/Documents/PhDproject/Project_folder/2020-derived-qrels/misinfo-qrels.2aspects.useful-credible',sep=' ',
+qrels=pd.read_csv('/home/ubuntu/rupadhyay/2020-derived-qrels//misinfo-qrels.2aspects.useful-credible',sep=' ',
                   names=['qid','Q0','docno','t','c'])
 qrels['label']=qrels['t']+qrels['c']-1
 
@@ -43,8 +43,10 @@ qrels['label']=qrels['t']+qrels['c']-1
 docs_merged=pd.merge(qrels,docs_100,on=['docno','qid'])
 docs_merged=docs_merged[['qid','query','docno','text','label']]
 
-simi_score=pd.read_csv('/home/ricky/Documents/PhDproject/Project_folder/pseudo_journals_Goodit/experiments/dtop100_jtop10/similarity_score_sw_biobert.csv',
+simi_score=pd.read_csv('/tmp/pycharm_project_631/experiments/dtop100_jtop10/trec_1M_similarity_biobert.csv',
                        sep='\t')
+# simi_score=pd.read_csv('/tmp/pycharm_project_631/result/40_60_biobert_simi_wa_d100_j10_trec_1M.csv',
+#                        sep='\t')
 
 average_score=get_averaged_score(simi_score)
 docs_merged_score=pd.merge(docs_merged,average_score,on=['docno','qid'])
