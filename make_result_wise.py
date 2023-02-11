@@ -2,26 +2,32 @@ import pandas as pd
 import numpy as np
 
 #TREC
-# docs_100=pd.read_csv('/tmp/pycharm_project_631/docs/docs_top_100.csv',sep='\t')
-# docs_100=docs_100[['qid','query','docno','text']]
-
-docs_100=pd.read_csv('/home/ubuntu/rupadhyay/CREDPASS/docs/TREC2020_BM25_clean_100.csv',sep='\t')
+docs_100=pd.read_csv('/tmp/pycharm_project_631/docs/docs_top_100.csv',sep='\t')
 docs_100=docs_100[['qid','query','docno','text','rank']]
+#
+# docs_100=pd.read_csv('/home/ubuntu/rupadhyay/CREDPASS/docs/TREC2020_BM25_clean_100.csv',sep='\t')
+# docs_100=docs_100[['qid','query','docno','text','rank']]
 #Test_qid
-# simi_score=pd.read_csv('/tmp/pycharm_project_631/result/40_60_biobert_simi_wa_d100_j10.csv',sep=' ',
-#                        names=['qid','Q0','docno','rank','score','experiment'])
+simi_score=pd.read_csv('/tmp/pycharm_project_631/result/40_60_biobert_simi_wa_d100_j10.csv',sep=' ',
+                       names=['qid','Q0','docno','rank','score','experiment'])
 
-simi_score = pd.read_csv('/tmp/pycharm_project_631/result/40_60_biobert_simi_wa_d100_j10_trec_1M.csv',sep=' ',
-                        names=['qid','Q0','docno','rank','score','experiment'])
-dataset = pd.read_csv('/tmp/pycharm_project_447/test_qid.csv', sep=';')
-qids=np.unique(dataset['qid'].values)
+# simi_score = pd.read_csv('/tmp/pycharm_project_631/result/40_60_biobert_simi_wa_d100_j10_trec_1M.csv',sep=' ',
+#                         names=['qid','Q0','docno','rank','score','experiment'])
+# dataset = pd.read_csv('/tmp/pycharm_project_447/test_qid.csv', sep=';')
+# qids=np.unique(dataset['qid'].values)
+
+qrels_file = "/home/ubuntu/rupadhyay/2020-derived-qrels/misinfo-qrels.cred.wise"
+dataset = pd.read_csv(qrels_file, sep=' ', names=['qid', 'Q0', 'docno', 'label'])
+qids = np.unique(dataset['qid'].values)
 
 simi_score=simi_score[simi_score['qid'].isin(qids)]
 simi_score.sort_values(by=['qid','rank'],inplace=True,ascending = True,)
 docs_100=docs_100[docs_100['qid'].isin(qids)]
 docs_100.sort_values(by=['qid','rank'],inplace=True,ascending = True,)
 
-simi_score.to_csv('./baseline_result/wise_test.csv',sep=' ',index=None,header=None)
+simi_score.to_csv('./baseline_result/wise_test_all.csv',sep=' ',index=None,header=None)
+
+docs_100.to_csv('./baseline_result/bm25_trec_all.csv',sep=' ',index=None,header=None)
 
 #CLEF 
 docs_100=pd.read_csv('/tmp/pycharm_project_631/docs/clef2020_docs.csv',sep=';')

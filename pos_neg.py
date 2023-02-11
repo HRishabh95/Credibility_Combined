@@ -60,7 +60,7 @@ def balance_dataset(data_path,top_n=14,test=4,json_required=False,triplet=True):
 
 
 def get_unbalanced_dataset(data_path='./datset.csv',test=0.3,json_required=True):
-    docs_merged_score = pd.read_csv(data_path, sep=';')
+    docs_merged_score = pd.read_csv(data_path, sep='\t',error_bad_lines=False)
     pos_neg_dataset = []
     no_qid = {}
     qids = docs_merged_score['qid'].unique()
@@ -77,21 +77,22 @@ def get_unbalanced_dataset(data_path='./datset.csv',test=0.3,json_required=True)
         final_dataset_test.append(docs_merged_score[docs_merged_score['qid'] == qid])
 
 
-    pd.concat(final_dataset_train).to_csv('./train_qid.csv', sep=';')
-    pd.concat(final_dataset_test).to_csv('./test_qid.csv', sep=';')
+    pd.concat(final_dataset_train).to_csv('./train_qid_clef_bm25.csv', sep=';')
+    pd.concat(final_dataset_test).to_csv('./test_qid_clef_bm25.csv', sep=';')
 
     if json_required:
         final_dataset_train = json.loads(pd.concat(final_dataset_train).to_json(orient='records'))
         final_dataset_test = json.loads(pd.concat(final_dataset_test).to_json(orient='records'))
 
-        with open("train_qid.jsonl", "w") as f:
+        with open("train_qid_clef_bm25.jsonl", "w") as f:
             for item in final_dataset_train:
                 f.write(json.dumps(item) + "\n")
 
-        with open("test_qid.jsonl", "w") as f:
+        with open("test_qid_clef_bm25.jsonl", "w") as f:
             for item in final_dataset_test:
                 f.write(json.dumps(item) + "\n")
 
 
 
-balance_dataset('./datset.csv')
+get_unbalanced_dataset('./dataset_clef_bm25_c_score.csv')
+
